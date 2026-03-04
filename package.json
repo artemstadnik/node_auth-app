@@ -39,7 +39,7 @@
     "typescript": "^5.9.3"
   },
   "mateAcademy": {
-    "projectType": "javascript"
+    "projectType": "typescript"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
