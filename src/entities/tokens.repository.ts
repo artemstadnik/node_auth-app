@@ -11,5 +11,5 @@ export const getByToken = (token: string) => {
 };
 
 export const deleteByUserId = (userId: string) => {
-  return prisma.token.delete({ where: { userId } });
+  return prisma.token.deleteMany({ where: { userId } });
 };

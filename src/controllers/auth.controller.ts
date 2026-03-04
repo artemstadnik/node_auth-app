@@ -81,8 +81,9 @@ export const activate: RequestHandler = async (req: Request, res: Response) => {
     });
   }
 
-  await usersRepository.activate(email);
-  await sendAuthentication(res, user);
+  const activatedUser = await usersRepository.activate(email);
+
+  await sendAuthentication(res, activatedUser);
 };
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
@@ -114,11 +115,9 @@ export const refresh: RequestHandler = async (req: Request, res: Response) => {
 
   if (!user || !userData || !token || token.userId !== user.id) {
     res.clearCookie('refreshToken');
-
     res.status(401).json({
       message: 'Invalid token',
     });
-
     return;
   }
 
@@ -130,9 +129,7 @@ export const logout: RequestHandler = async (req: Request, res: Response) => {
   const userData = jwt.validateRefreshToken(refreshToken);
 
   if (userData) {
-    try {
-      await tokensRepository.deleteByUserId(userData.id);
-    } catch {}
+    await tokensRepository.deleteByUserId(userData.id);
   }
 
   res.clearCookie('refreshToken');
