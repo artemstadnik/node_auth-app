@@ -12,9 +12,7 @@ export const sendAuthentication = async (res: Response, user: User) => {
   const accessToken = jwt.generateAccessToken(userData);
   const refreshToken = jwt.generateRefreshToken(userData);
 
-  try {
-    await tokensRepository.deleteByUserId(user.id);
-  } catch {}
+  await tokensRepository.deleteByUserId(user.id);
 
   await tokensRepository.create(user.id, refreshToken);
 
@@ -115,9 +113,11 @@ export const refresh: RequestHandler = async (req: Request, res: Response) => {
 
   if (!user || !userData || !token || token.userId !== user.id) {
     res.clearCookie('refreshToken');
+
     res.status(401).json({
       message: 'Invalid token',
     });
+
     return;
   }
 
